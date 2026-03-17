@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Path Finder Academy - Admission Form</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="tuition-header">
+
+        <div class="header-top">
+            <img src="{{ url_for('static', filename='image.jpg') }}"  class="logo" 
+            alt="Path Finder Academy Logo">
+    
+            <div class="title-box">
+                <h1>Path Finder Academy</h1>
+                <p>Tuition Admission Form</p>
+            </div>
+        </div>
+    
+    </div>
+    
+    
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="alert">
+          {{ messages[0] }} <br> We will contact you shortly.
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form action="/" method="POST" id="admissionForm">
+        
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-step active">1</div>
+            <div class="progress-step">2</div>
+            <div class="progress-step">3</div>
+        </div>
+
+        <!-- Step 1: Personal Details -->
+        <div class="form-step active-step">
+            <h3>Personal Details</h3>
+            <br>
+            <label>First Name</label>
+            <input type="text" name="first_name" required placeholder="Enter your first name">
+            
+            <label>Last Name</label>
+            <input type="text" name="last_name" required placeholder="Enter your last name">
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-next">Next</button>
+            </div>
+        </div>
+
+        <!-- Step 2: Contact Info -->
+        <div class="form-step">
+            <h3>Contact & Academic Info</h3>
+            <br>
+            <label>Email Address</label>
+            <input type="email" name="email" required placeholder="Enter your email">
+            
+            <label>Phone Number</label>
+            <input type="tel" name="phone" required placeholder="+92 3423467689">
+
+            <label>Current Grade/Class</label>
+            <select name="grade">
+                <option value="">Select Grade</option>
+                <option value="Grade 1-5">Grade 1-5 (Primary)</option>
+                <option value="Grade 6-8">Grade 6-8 (Middle School)</option>
+                <option value="Grade 9-10">Grade 9-10 (GCSE/O-Level)</option>
+                <option value="Grade 11-12">Grade 11-12 (A-Level)</option>
+                <option value="College">College/University</option>
+            </select>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-prev">Previous</button>
+                <button type="button" class="btn btn-next">Next</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Course Selection -->
+        <div class="form-step">
+            <h3>Course Selection</h3>
+            <br>
+            <label>Select Preferred Subject</label>
+            <select name="subject">
+                <option value="">Select a Subject</option>
+                
+                <!-- Academic Subjects -->
+                <optgroup label="📐 Academic Subjects">
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Biology">Biology</option>
+                    <option value="English">English</option>
+                </optgroup>
+                
+                <!-- Computer Courses -->
+                <optgroup label="💻 Computer Courses">
+                    <option value="Computer Basics">Computer Basics</option>
+                    <option value="Programming">Programming (Coding)</option>
+                    <option value="Artificial Intelligence">Artificial Intelligence (AI)</option>
+                </optgroup>
+                
+                
+            </select>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-prev">Previous</button>
+                <button type="submit" class="btn btn-next">Submit Application</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    const form = document.getElementById('admissionForm');
+    const steps = Array.from(document.querySelectorAll('.form-step'));
+    const nextBtns = document.querySelectorAll('.btn-next');
+    const prevBtns = document.querySelectorAll('.btn-prev');
+    const progressSteps = document.querySelectorAll('.progress-step');
+
+    let currentStep = 0;
+
+    function updateFormSteps() {
+        steps.forEach((step, index) => {
+            step.classList.toggle('active-step', index === currentStep);
+        });
+
+        progressSteps.forEach((step, index) => {
+            step.classList.toggle('active', index <= currentStep);
+        });
+    }
+
+    nextBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const currentInputs = steps[currentStep].querySelectorAll('input, select');
+            let valid = true;
+            currentInputs.forEach(input => {
+                if(!input.checkValidity()) {
+                    input.reportValidity();
+                    valid = false;
+                }
+            });
+
+            if(valid) {
+                currentStep++;
+                updateFormSteps();
+            }
+        });
+    });
+
+    prevBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            currentStep--;
+            updateFormSteps();
+        });
+    });
+</script>
+
+</body>
+</html>
